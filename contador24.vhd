@@ -2,15 +2,15 @@ library ieee ;
     use ieee.std_logic_1164.all ;
     use ieee.std_logic_unsigned.all;
 
-entity contador60 is
+entity contador24 is
   port (
     clock, reset: in std_logic;
     ajuste: in std_logic_vector(4 downto 0);
     saida: out std_logic_vector(4 downto 0)
   );
-end contador60; 
+end contador24; 
 
-architecture arq of contador60 is
+architecture arq of contador24 is
 signal count: std_logic_vector(4 downto 0) := ajuste;
 begin
   process(clock, reset, ajuste)

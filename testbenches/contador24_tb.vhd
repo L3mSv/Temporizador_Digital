@@ -8,12 +8,13 @@ architecture test of contador24_tb is
 	signal clock: std_logic := '0';
 	signal reset: std_logic := '1';
 	signal saida_out: std_logic_vector(4 downto 0);
-    signal ajuste: std_logic_vector(4 downto 0);
+    signal ajuste: std_logic_vector(4 downto 0) := "01010";
 
 	component contador24 is 
 	port(
 	clock, reset: in std_logic;
-    saida: out std_logic_vector(4 downto 0)
+	ajuste: in std_logic_vector(4 downto 0);
+    	saida: out std_logic_vector(4 downto 0)
 	);
 	end component contador24;
 	
@@ -26,8 +27,8 @@ begin
 	port map(
 	clock => clock,
 	reset => reset,
-	saida => saida_out,
-    ajuste => ajuste
+        ajuste => ajuste,
+	saida => saida_out
 	);
 	
 	stimulus:
