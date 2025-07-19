@@ -7,11 +7,13 @@ end entity contador60_tb;
 architecture test of contador60_tb is
 	signal clock: std_logic := '0';
 	signal reset: std_logic := '1';
+	signal ajuste: std_logic_vector(5 downto 0) := "110000";
 	signal saida_out: std_logic_vector(5 downto 0);
 
 	component contador60 is 
 	port(
-	 clock, reset: in std_logic;
+	clock, reset: in std_logic;
+	ajuste: in std_logic_vector(5 downto 0);
     saida: out std_logic_vector(5 downto 0)
 	);
 	end component contador60;
@@ -25,6 +27,7 @@ begin
 	port map(
 	clock => clock,
 	reset => reset,
+	ajuste => ajuste,
 	saida => saida_out
 	);
 	
