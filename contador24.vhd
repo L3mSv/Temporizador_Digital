@@ -5,7 +5,7 @@ library ieee ;
 entity contador24 is
   port (
     clock, reset: in std_logic;
-    ajuste: in std_logic_vector(4 downto 0);
+    ajuste: in std_logic_vector(4 downto 0) := "10111";
     saida: out std_logic_vector(4 downto 0)
   );
 end contador24; 
@@ -17,7 +17,7 @@ begin
 	begin
     if reset = '1' then 
       count <= ajuste;
-	  elsif rising_edge(clock) then
+    elsif rising_edge(clock) then
       if count = "00000" then 
         count <= ajuste;
       else

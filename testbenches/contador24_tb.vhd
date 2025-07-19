@@ -14,7 +14,7 @@ architecture test of contador24_tb is
 	port(
 	clock, reset: in std_logic;
 	ajuste: in std_logic_vector(4 downto 0);
-    	saida: out std_logic_vector(4 downto 0)
+    saida: out std_logic_vector(4 downto 0)
 	);
 	end component contador24;
 	
@@ -27,7 +27,7 @@ begin
 	port map(
 	clock => clock,
 	reset => reset,
-        ajuste => ajuste,
+    ajuste => ajuste,
 	saida => saida_out
 	);
 	
