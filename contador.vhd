@@ -1,27 +1,30 @@
-library ieee ;
-    use ieee.std_logic_1164.all ;
-    use ieee.numeric_std.all ;
-	 use ieee.std_logic_unsigned.all;
+library ieee;
+    use ieee.std_logic_1164.all; 
+    use ieee.numeric_std.all; 
+    use ieee.std_logic_unsigned.all; 
 
 entity contador is
   port (
-    clock, reset: in std_logic;
-	 limite: in std_logic_vector(5 downto 0);
-	 saida: out std_logic_vector(5 downto 0)
+    clock, reset: in std_logic; 
+    I: in std_logic_vector(3 downto 0); -- Entrada que define o valor inicial do contador
+    S: out std_logic_vector(3 downto 0) 
   );
-end contador; 
+end contador;
 
 architecture arq of contador is
-signal count: std_logic_vector(5 downto 0);
-signal temp: std_logic; 
+signal count: std_logic_vector(3 downto 0) := I;
 begin
-    process(clock, reset, count)
-		begin
-        if reset = '1' or (count = limite) then 
-            count <= "000000";
-		 elsif rising_edge(clock) then
-            count <= count + 1;
-			end if;
-		 saida <= count;
+    process(clock, reset) 
+    begin
+        if reset = '1' then 
+            count <= I; -- Quando reset é '1', reinicia com o valor de I
+        elsif rising_edge(clock) then 
+            if count = "0000" then 
+                count <= I; -- Se chegou a zero, reinicia com o valor de I
+            else
+                count <= count - 1;
+            end if;
+        end if;
+        S <= count; 
     end process;
-end arq ;
+end arq;
