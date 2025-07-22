@@ -2,7 +2,8 @@ Library IEEE;
 USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_unsigned.all;
 
---divisor de frequencia por 16
+-- Numero de ciclos (N) -> N = f(entrada)/2 * f(saida)
+
 Entity divisorFrequencia100hz is
 port (clock,reset : in std_logic;
       q : out std_logic); 
