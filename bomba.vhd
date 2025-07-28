@@ -1,71 +1,70 @@
-library ieee ;
-    use ieee.std_logic_1164.all ;
-    use ieee.numeric_std.all ;
-	 use ieee.std_logic_unsigned.all;
+library ieee;
+	use ieee.std_logic_1164.all;
+	use ieee.numeric_std.all;
+	use ieee.std_logic_unsigned.all;
 
 entity bomba is
-  port (
-    clock, reset: in std_logic; 
-	 S1: out std_logic_vector(6 downto 0);
-	 S2: out std_logic_vector(6 downto 0);
-	 S3: out std_logic_vector(6 downto 0);
-	 S4: out std_logic_vector(6 downto 0)
-  );
+	port(
+		clock, reset: in std_logic; 		
+		S1: out std_logic_vector(6 downto 0);
+		S2: out std_logic_vector(6 downto 0);
+		S3: out std_logic_vector(6 downto 0);
+		S4: out std_logic_vector(6 downto 0)
+	);
 end bomba; 
 
 architecture arq of bomba is
-  component timer
-	  port (
-		 clock, reset: in std_logic; 
-		 I1, I2: in std_logic_vector(3 downto 0);
-		 S1, S2: out std_logic_vector(6 downto 0)
-	  );
-  end component;
-  
-  component divisor
-    port (
-      clock, reset : in std_logic;
-      I : in std_logic_vector(24 downto 0);
-      S : out std_logic
-    );
-  end component;
-
-	signal clock_dividido_1: std_logic;
-	signal clock_dividido_2: std_logic;
-begin
-	D1: divisor
-    port map (
-      clock => clock,
-      reset => reset,
-      I => "0000001000001111010110000",
-      S => clock_dividido_1
-    );
-
-	D2: divisor
-    port map (
-      clock => clock_dividido_1,
-      reset => reset,
-      I => "0000000000000000000011000",
-      S => clock_dividido_2
+	component decodificador
+   port(
+      I: in std_logic_vector(3 downto 0);
+      S: out std_logic_vector(6 downto 0)
    );
-	 
-   M1: timer
-    port map (
-      clock => clock_dividido_1,
-      reset => reset, 
-		I1 => "1010",
-		I2 => "0110",
-		S1 => S1,
-		S2 => S2
-    );
-	
-   M2: timer
-    port map (
-      clock => clock_dividido_2,
-      reset => reset, 
-		I1 => "0100",
-		I2 => "0011",
-		S1 => S3,
-		S2 => S4
-    );
-end arq ;
+	end component;
+
+	component timer is
+		port(
+			clock, reset: in std_logic; 
+			S1: out std_logic_vector(3 downto 0);
+			S2: out std_logic_vector(3 downto 0);
+			S3: out std_logic_vector(3 downto 0);
+			S4: out std_logic_vector(3 downto 0)
+		);
+	end component;
+
+	signal unidades_1, dezenas_1, unidades_2, dezenas_2: std_logic_vector(3 downto 0);
+	begin
+
+	T1: timer
+	port map (
+		clock => clock,
+		reset => reset,
+		S1 => unidades_1,
+		S2 => dezenas_1,
+		S3 => unidades_2,
+		S4 => dezenas_2
+	);
+
+	D1: decodificador
+	port map (
+		I => unidades_1,
+		S => S1
+	);  
+
+	D2: decodificador
+	port map (
+			I => dezenas_1,
+			S => S2
+	  );
+
+	D3: decodificador
+	port map (
+			I => unidades_2,
+			S => S3
+	  );
+
+	D4: decodificador
+	port map (
+			I => dezenas_2,
+			S => S4
+	);
+end arq;
