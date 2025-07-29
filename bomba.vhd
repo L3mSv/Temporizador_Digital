@@ -5,7 +5,8 @@ library ieee;
 
 entity bomba is
 	port(
-		clock, reset: in std_logic; 		
+		clock: in std_logic;
+		reset: in std_logic;	
 		S1: out std_logic_vector(6 downto 0);
 		S2: out std_logic_vector(6 downto 0);
 		S3: out std_logic_vector(6 downto 0);
@@ -14,57 +15,73 @@ entity bomba is
 end bomba; 
 
 architecture arq of bomba is
-	component decodificador
-   port(
-      I: in std_logic_vector(3 downto 0);
-      S: out std_logic_vector(6 downto 0)
-   );
-	end component;
-
 	component timer is
 		port(
-			clock, reset: in std_logic; 
-			S1: out std_logic_vector(3 downto 0);
-			S2: out std_logic_vector(3 downto 0);
-			S3: out std_logic_vector(3 downto 0);
-			S4: out std_logic_vector(3 downto 0)
-		);
+			clock: in std_logic;
+			reset: in std_logic;
+			I1: in std_logic_vector(3 downto 0);
+			I2: in std_logic_vector(3 downto 0);	
+			S: out std_logic_vector(6 downto 0);
+			D: out std_logic
+  );
 	end component;
+	
+  component divisor27Mhz
+    port (
+      clock: in std_logic;
+      reset: in std_logic;
+      S: out std_logic
+    );
+  end component;	
+	
+	signal clock_dividido_27M, clock_T1, clock_T2, clock_T3, clock_T4: std_logic;
+begin
 
-	signal unidades_1, dezenas_1, unidades_2, dezenas_2: std_logic_vector(3 downto 0);
-	begin
+  	D1: divisor27Mhz
+   port map (
+      clock => clock,
+      reset => reset,
+      S => clock_dividido_27M
+   );
 
 	T1: timer
 	port map (
-		clock => clock,
+		clock => clock_dividido_27M,
+		reset => reset or clock_T2 or clock_T4,
+		I1 => "0000",
+		I2 => "1001",
+		S => S1,
+		D => clock_T1
+	);
+
+	T2: timer
+	port map (
+		clock => clock_T1,
+		reset => reset or clock_T4,
+		I1 => "0110",
+		I2 => "0110",
+		S => S2,
+		D => Clock_T2
+	);	
+
+	T3: timer
+	port map (
+		clock => Clock_T2,
+		reset => reset or clock_T4,
+		I1 => "0011",
+		I2 => "0011",
+		S => S3,
+		D => clock_T3
+	);	
+	
+	T4: timer
+	port map (
+		clock => Clock_T3,
 		reset => reset,
-		S1 => unidades_1,
-		S2 => dezenas_1,
-		S3 => unidades_2,
-		S4 => dezenas_2
-	);
-
-	D1: decodificador
-	port map (
-		I => unidades_1,
-		S => S1
-	);  
-
-	D2: decodificador
-	port map (
-			I => dezenas_1,
-			S => S2
-	  );
-
-	D3: decodificador
-	port map (
-			I => unidades_2,
-			S => S3
-	  );
-
-	D4: decodificador
-	port map (
-			I => dezenas_2,
-			S => S4
-	);
+		I1 => "0010",
+		I2 => "0010",
+		S => S4,
+		D => clock_T4
+	);		
+	
 end arq;

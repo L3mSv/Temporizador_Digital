@@ -2,25 +2,25 @@ Library IEEE;
 USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_unsigned.all;
 
-Entity divisor is
+Entity divisor27Mhz is
 port (
-    clock, reset : in std_logic;
-    I : in std_logic_vector(3 downto 0); 
+    clock: in std_logic;
+	 reset : in std_logic; 
     S : out std_logic
 );
-end divisor;
+end divisor27Mhz;
 
-architecture arq of divisor is
+architecture arq of divisor27Mhz is
 begin
     process(clock, reset)
-        variable count: std_logic_vector(3 downto 0);
+        variable count: std_logic_vector(24 downto 0);
         variable temp : std_logic;
     begin
         if reset = '1' then
             count := (others => '0');
             temp := '0';
-        elsif rising_edge(clock) then 
-            if count = I then
+        elsif clock'event and clock = '1' then
+            if count = "1000001111010110000000000" then
                 count := (others => '0');
                 temp := not temp;
             else
