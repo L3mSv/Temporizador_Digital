@@ -44,13 +44,7 @@ architecture arq of timer is
 	signal unidades: std_logic_vector(3 downto 0);
 begin
 
-	DIV: divisor
-    port map (
-      clock => clock,
-      reset => reset,
-      I => I1,
-      S => D
-    );
+	D <= '0' when unidades = "9999" else '1';
 
 	 CONT: contador
     port map (

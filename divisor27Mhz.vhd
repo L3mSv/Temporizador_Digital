@@ -20,7 +20,7 @@ begin
             count := (others => '0');
             temp := '0';
         elsif clock'event and clock = '1' then
-            if count = "1000001111010110000000000" then
+            if count = "0010000011110101100000000" then
                 count := (others => '0');
                 temp := not temp;
             else
